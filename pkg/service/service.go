@@ -1,9 +1,12 @@
 package service
 
-import "github.com/len3fun/money-tracker/pkg/repository"
+import (
+	moneytracker "github.com/len3fun/money-tracker"
+	"github.com/len3fun/money-tracker/pkg/repository"
+)
 
 type Authorization interface {
-
+	CreateUser(user moneytracker.User) (int, error)
 }
 
 type MoneySource interface {
@@ -16,5 +19,7 @@ type Service struct {
 }
 
 func NewService(repos *repository.Repository) *Service {
-	return &Service{}
+	return &Service{
+		Authorization: NewAuthService(repos.Authorization),
+	}
 }

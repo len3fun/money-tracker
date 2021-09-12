@@ -8,6 +8,7 @@ import (
 type Authorization interface {
 	CreateUser(user moneytracker.User) (int, error)
 	GenerateToken(username, password string) (string, error)
+	ParseToken(token string) (int, error)
 }
 
 type MoneySource interface {

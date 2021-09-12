@@ -7,6 +7,7 @@ import (
 
 type Authorization interface {
 	CreateUser(user moneytracker.User) (int, error)
+	GetUser(username, password string) (moneytracker.User, error)
 }
 
 type MoneySource interface {

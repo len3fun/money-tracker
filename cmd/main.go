@@ -10,6 +10,8 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/spf13/viper"
 	"os"
+	"os/signal"
+	"syscall"
 )
 
 func main() {
@@ -41,11 +43,26 @@ func main() {
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
 
-	srv := new(server.Server)
-	if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
-		logger.Errorf("error occured while running http server: %s", err.Error())
-		return
+	go func() {
+		srv := new(server.Server)
+		if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
+			logger.Errorf("error occured while running http server: %s", err.Error())
+			return
+		}
+	}()
+
+	logger.Info("Server has started")
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
+	<-quit
+
+	logger.Info("Server is stopping")
+	if err := db.Close(); err != nil {
+		logger.Errorf("close db connection error: %s", err.Error())
 	}
+
+	logger.Info("Server is stopped")
 }
 
 func initConfig() error {

@@ -16,7 +16,7 @@ func NewActivityRepository(db *sqlx.DB) *ActivityRepository {
 }
 
 func (r *ActivityRepository) GetAllActivities(userId int) ([]models.ActivitiesOut, error) {
-	var activities []models.ActivitiesOut
+	activities := make([]models.ActivitiesOut, 0)
 	query := fmt.Sprintf("SELECT change, activity_type, label, activity_date " +
 		"FROM %s " +
 		"WHERE user_id = $1", activitiesTable)

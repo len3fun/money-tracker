@@ -19,3 +19,11 @@ func (r *CurrencyPostgres) CreateCurrency(item moneytracker.Currency) error {
 	_, err := r.db.Exec(query, item.Name, item.Ticket)
 	return err
 }
+
+func (r *CurrencyPostgres) GetAllCurrencies() ([]moneytracker.Currency, error) {
+	var currencies []moneytracker.Currency
+	query := fmt.Sprintf("SELECT name, ticket FROM %s", currenciesTable)
+
+	err := r.db.Select(&currencies, query)
+	return currencies, err
+}

@@ -15,6 +15,7 @@ type MoneySource interface {
 
 type Currency interface {
 	CreateCurrency(item moneytracker.Currency) error
+	GetAllCurrencies() ([]moneytracker.Currency, error)
 }
 
 type Repository struct {

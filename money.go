@@ -31,8 +31,8 @@ type Activities struct {
 }
 
 type Currency struct {
-	Name   string `json:"name"`
-	Ticket string `json:"ticket"`
+	Name   string `json:"name" db:"name"`
+	Ticket string `json:"ticket" db:"ticket"`
 }
 
 func (c *Currency) Validate() error {

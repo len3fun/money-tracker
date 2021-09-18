@@ -7,14 +7,8 @@ import (
 )
 
 func (h *Handler) CreateCurrency(c *gin.Context) {
-	_, err := getUserId(c)
-	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
-		return
-	}
-
 	var input moneytracker.Currency
-	err = c.BindJSON(&input)
+	err := c.BindJSON(&input)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
@@ -33,4 +27,13 @@ func (h *Handler) CreateCurrency(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, "ok")
+}
+
+func (h *Handler) getAllCurrencies(c *gin.Context) {
+	currencies, err := h.services.Currency.GetAllCurrencies()
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, currencies)
 }

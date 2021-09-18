@@ -30,6 +30,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		}
 		currencies := api.Group("/currencies")
 		{
+			currencies.GET("/", h.getAllCurrencies)
 			currencies.POST("/", h.CreateCurrency)
 		}
 	}

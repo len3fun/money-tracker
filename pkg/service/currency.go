@@ -16,3 +16,7 @@ func NewCurrencyService(repo repository.Currency) *CurrencyService {
 func (s *CurrencyService) CreateCurrency(item moneytracker.Currency) error {
 	return s.repo.CreateCurrency(item)
 }
+
+func (s *CurrencyService) GetAllCurrencies() ([]moneytracker.Currency, error) {
+	return s.repo.GetAllCurrencies()
+}

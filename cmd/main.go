@@ -4,21 +4,23 @@ import (
 	"github.com/joho/godotenv"
 	moneytracker "github.com/len3fun/money-tracker"
 	"github.com/len3fun/money-tracker/pkg/handler"
+	"github.com/len3fun/money-tracker/pkg/logger"
 	"github.com/len3fun/money-tracker/pkg/repository"
 	"github.com/len3fun/money-tracker/pkg/service"
 	_ "github.com/lib/pq"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"os"
 )
 
 func main() {
-	logrus.SetFormatter(new(logrus.JSONFormatter))
+	logger.InitLogger()
 	if err := initConfig(); err != nil {
-		logrus.Fatalf("error initializing config: %s", err.Error())
+		logger.Errorf("error initializing config: %s", err.Error())
+		return
 	}
 	if err := godotenv.Load(); err != nil {
-		logrus.Fatalf("error loading env variables: %s", err.Error())
+		logger.Errorf("error loading env variables: %s", err.Error())
+		return
 	}
 
 	db, err := repository.NewPostgresDB(repository.Config{
@@ -30,7 +32,8 @@ func main() {
 		Password: os.Getenv("DB_PASSWORD"),
 	})
 	if err != nil {
-		logrus.Fatalf("failed to initialize db: %s", err.Error())
+		logger.Errorf("failed to initialize db: %s", err.Error())
+		return
 	}
 
 	repos := repository.NewRepository(db)
@@ -39,7 +42,8 @@ func main() {
 
 	srv := new(moneytracker.Server)
 	if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
-		logrus.Fatalf("error occured while running http server: %s", err.Error())
+		logger.Errorf("error occured while running http server: %s", err.Error())
+		return
 	}
 }
 

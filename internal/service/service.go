@@ -12,7 +12,6 @@ type Authorization interface {
 }
 
 type MoneySource interface {
-
 }
 
 type Currency interface {
@@ -20,14 +19,20 @@ type Currency interface {
 	GetAllCurrencies() ([]models.Currency, error)
 }
 
+type Activity interface {
+	GetAllActivities(userId int) ([]models.ActivitiesOut, error)
+}
+
 type Service struct {
 	Authorization
 	Currency
+	Activity
 }
 
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Authorization: NewAuthService(repos.Authorization),
 		Currency:      NewCurrencyService(repos.Currency),
+		Activity:      NewActivityService(repos.Activity),
 	}
 }

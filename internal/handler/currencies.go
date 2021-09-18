@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func (h *Handler) CreateCurrency(c *gin.Context) {
+func (h *Handler) createCurrency(c *gin.Context) {
 	var input models.Currency
 	err := c.BindJSON(&input)
 	if err != nil {

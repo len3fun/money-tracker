@@ -13,6 +13,10 @@ type Authorization interface {
 type MoneySource interface {
 }
 
+type Activity interface {
+	GetAllActivities(userId int) ([]models.ActivitiesOut, error)
+}
+
 type Currency interface {
 	CreateCurrency(item models.Currency) error
 	GetAllCurrencies() ([]models.Currency, error)
@@ -21,11 +25,13 @@ type Currency interface {
 type Repository struct {
 	Authorization
 	Currency
+	Activity
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		Authorization: NewAuthPostgres(db),
 		Currency:      NewCurrencyPostgres(db),
+		Activity:      NewActivityRepository(db),
 	}
 }

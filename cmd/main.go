@@ -13,7 +13,6 @@ import (
 )
 
 func main() {
-	logger.InitLogger()
 	if err := initConfig(); err != nil {
 		logger.Errorf("error initializing config: %s", err.Error())
 		return
@@ -22,6 +21,8 @@ func main() {
 		logger.Errorf("error loading env variables: %s", err.Error())
 		return
 	}
+
+	logger.InitLogger()
 
 	db, err := repository.NewPostgresDB(repository.Config{
 		Host:     viper.GetString("db.host"),

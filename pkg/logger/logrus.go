@@ -1,6 +1,9 @@
 package logger
 
-import "github.com/sirupsen/logrus"
+import (
+	"github.com/sirupsen/logrus"
+	"os"
+)
 
 func Debug(msg ...interface{}) {
 	logrus.Debug(msg...)
@@ -40,4 +43,8 @@ func InitLogger() {
 		DisableTimestamp: false,
 		FullTimestamp:    true,
 	})
+
+	if debug := os.Getenv("DEBUG"); debug == "true" {
+		logrus.SetLevel(logrus.DebugLevel)
+	}
 }

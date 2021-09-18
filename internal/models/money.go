@@ -41,3 +41,10 @@ func (c *Currency) Validate() error {
 	}
 	return nil
 }
+
+type ActivitiesOut struct {
+	Type         string          `json:"type" db:"activity_type"`
+	Change       decimal.Decimal `json:"change" db:"change"`
+	Label        string          `json:"label" db:"label"`
+	ActivityDate time.Time       `json:"activity_date" db:"activity_date"`
+}

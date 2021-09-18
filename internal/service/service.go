@@ -21,6 +21,7 @@ type Currency interface {
 
 type Activity interface {
 	GetAllActivities(userId int) ([]models.ActivitiesOut, error)
+	CreateActivity(activity models.Activity) error
 }
 
 type Service struct {

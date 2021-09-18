@@ -36,6 +36,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		activities := api.Group("/activities")
 		{
 			activities.GET("/", h.getAllActivities)
+			activities.POST("/", h.createActivity)
 		}
 	}
 

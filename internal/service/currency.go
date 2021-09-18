@@ -1,8 +1,8 @@
 package service
 
 import (
-	moneytracker "github.com/len3fun/money-tracker"
-	"github.com/len3fun/money-tracker/pkg/repository"
+	"github.com/len3fun/money-tracker/internal/models"
+	"github.com/len3fun/money-tracker/internal/repository"
 )
 
 type CurrencyService struct {
@@ -13,10 +13,10 @@ func NewCurrencyService(repo repository.Currency) *CurrencyService {
 	return &CurrencyService{repo: repo}
 }
 
-func (s *CurrencyService) CreateCurrency(item moneytracker.Currency) error {
+func (s *CurrencyService) CreateCurrency(item models.Currency) error {
 	return s.repo.CreateCurrency(item)
 }
 
-func (s *CurrencyService) GetAllCurrencies() ([]moneytracker.Currency, error) {
+func (s *CurrencyService) GetAllCurrencies() ([]models.Currency, error) {
 	return s.repo.GetAllCurrencies()
 }

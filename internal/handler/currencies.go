@@ -2,12 +2,12 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	moneytracker "github.com/len3fun/money-tracker"
+	"github.com/len3fun/money-tracker/internal/models"
 	"net/http"
 )
 
 func (h *Handler) CreateCurrency(c *gin.Context) {
-	var input moneytracker.Currency
+	var input models.Currency
 	err := c.BindJSON(&input)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())

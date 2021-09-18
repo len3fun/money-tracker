@@ -1,4 +1,4 @@
-package money_tracker
+package models
 
 import (
 	"errors"

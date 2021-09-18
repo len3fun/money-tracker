@@ -2,20 +2,20 @@ package repository
 
 import (
 	"github.com/jmoiron/sqlx"
-	moneytracker "github.com/len3fun/money-tracker"
+	"github.com/len3fun/money-tracker/internal/models"
 )
 
 type Authorization interface {
-	CreateUser(user moneytracker.User) (int, error)
-	GetUser(username, password string) (moneytracker.User, error)
+	CreateUser(user models.User) (int, error)
+	GetUser(username, password string) (models.User, error)
 }
 
 type MoneySource interface {
 }
 
 type Currency interface {
-	CreateCurrency(item moneytracker.Currency) error
-	GetAllCurrencies() ([]moneytracker.Currency, error)
+	CreateCurrency(item models.Currency) error
+	GetAllCurrencies() ([]models.Currency, error)
 }
 
 type Repository struct {

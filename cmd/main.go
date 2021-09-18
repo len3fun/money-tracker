@@ -2,11 +2,11 @@ package main
 
 import (
 	"github.com/joho/godotenv"
-	moneytracker "github.com/len3fun/money-tracker"
-	"github.com/len3fun/money-tracker/pkg/handler"
+	"github.com/len3fun/money-tracker/internal/handler"
+	"github.com/len3fun/money-tracker/internal/repository"
+	"github.com/len3fun/money-tracker/internal/server"
+	"github.com/len3fun/money-tracker/internal/service"
 	"github.com/len3fun/money-tracker/pkg/logger"
-	"github.com/len3fun/money-tracker/pkg/repository"
-	"github.com/len3fun/money-tracker/pkg/service"
 	_ "github.com/lib/pq"
 	"github.com/spf13/viper"
 	"os"
@@ -40,7 +40,7 @@ func main() {
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
 
-	srv := new(moneytracker.Server)
+	srv := new(server.Server)
 	if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
 		logger.Errorf("error occured while running http server: %s", err.Error())
 		return

@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
-	moneytracker "github.com/len3fun/money-tracker"
-	"github.com/len3fun/money-tracker/pkg/repository"
+	"github.com/len3fun/money-tracker/internal/models"
+	"github.com/len3fun/money-tracker/internal/repository"
 	"time"
 )
 
@@ -29,7 +29,7 @@ func NewAuthService(repo repository.Authorization) *AuthService {
 	return &AuthService{repo: repo}
 }
 
-func (s *AuthService) CreateUser(user moneytracker.User) (int, error) {
+func (s *AuthService) CreateUser(user models.User) (int, error) {
 	user.Password = generatePasswordHash(user.Password)
 	return s.repo.CreateUser(user)
 }

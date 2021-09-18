@@ -1,4 +1,4 @@
-package money_tracker
+package models
 
 type User struct {
 	Id       int    `json:"-" db:"id"`

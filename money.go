@@ -1,6 +1,7 @@
 package money_tracker
 
 import (
+	"errors"
 	"github.com/shopspring/decimal"
 	"time"
 )
@@ -27,4 +28,16 @@ type Activities struct {
 	Change       decimal.Decimal `json:"change"`
 	Label        string          `json:"label"`
 	ActivityDate time.Time       `json:"activity_date"`
+}
+
+type Currency struct {
+	Name   string `json:"name"`
+	Ticket string `json:"ticket"`
+}
+
+func (c *Currency) Validate() error {
+	if c.Name == "" || c.Ticket == "" {
+		return errors.New("invalid currency input, fields 'name' and 'ticket' are required")
+	}
+	return nil
 }

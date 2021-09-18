@@ -28,6 +28,10 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		{
 			sources.GET("/", h.GetAllSources)
 		}
+		currencies := api.Group("/currencies")
+		{
+			currencies.POST("/", h.CreateCurrency)
+		}
 	}
 
 	return router

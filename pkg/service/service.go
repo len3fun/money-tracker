@@ -15,13 +15,18 @@ type MoneySource interface {
 
 }
 
+type Currency interface {
+	CreateCurrency(item moneytracker.Currency) error
+}
+
 type Service struct {
 	Authorization
-	MoneySource
+	Currency
 }
 
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Authorization: NewAuthService(repos.Authorization),
+		Currency: NewCurrencyService(repos.Currency),
 	}
 }

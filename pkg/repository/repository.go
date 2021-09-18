@@ -11,16 +11,20 @@ type Authorization interface {
 }
 
 type MoneySource interface {
+}
 
+type Currency interface {
+	CreateCurrency(item moneytracker.Currency) error
 }
 
 type Repository struct {
 	Authorization
-	MoneySource
+	Currency
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		Authorization: NewAuthPostgres(db),
+		Currency:      NewCurrencyPostgres(db),
 	}
 }

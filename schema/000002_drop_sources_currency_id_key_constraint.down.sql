@@ -1,0 +1,1 @@
+ALTER TABLE sources ADD CONSTRAINT sources_currency_id_key UNIQUE (currency_id)

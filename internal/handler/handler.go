@@ -27,6 +27,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		sources := api.Group("/sources")
 		{
 			sources.GET("/", h.getAllSources)
+			sources.POST("/", h.createSource)
 		}
 		currencies := api.Group("/currencies")
 		{

@@ -17,4 +17,7 @@ func (s *Source) GetAllSources(userId int) ([]models.SourceOut, error) {
 	return s.repo.GetAllSources(userId)
 }
 
+func (s *Source) CreateSource(source models.Source) error {
+	return s.repo.CreateSource(source)
+}
 

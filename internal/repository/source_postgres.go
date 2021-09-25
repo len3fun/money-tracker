@@ -22,3 +22,10 @@ func (r *SourcePostgres) GetAllSources(userId int) ([]models.SourceOut, error) {
 	err := r.db.Select(&sources, query, userId)
 	return sources, err
 }
+
+func (r *SourcePostgres) CreateSource(source models.Source) error {
+	query := fmt.Sprintf("INSERT INTO %s(user_id, source_type, balance, currency_id) " +
+		"VALUES ($1, $2, $3, $4)", sourcesTable)
+	_, err := r.db.Exec(query, source.UserId, source.Type, source.Balance, source.CurrencyId)
+	return err
+}

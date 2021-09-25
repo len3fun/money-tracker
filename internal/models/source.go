@@ -6,9 +6,10 @@ import (
 )
 
 type Source struct {
-	UserId  int             `json:"user_id"`
-	Type    string          `json:"type"`
-	Balance decimal.Decimal `json:"balance"`
+	UserId     int             `json:"user_id"`
+	Type       string          `json:"type"`
+	Balance    decimal.Decimal `json:"balance"`
+	CurrencyId int             `json:"currency_id"`
 }
 
 type SourceOut struct {
@@ -20,6 +21,9 @@ type SourceOut struct {
 func (s *Source) Validate() error {
 	if s.Type == "" {
 		return errors.New("'type' field shouldn't be empty")
+	}
+	if s.CurrencyId <= 0 {
+		return errors.New("'currency_id' field should be more than 0")
 	}
 	return nil
 }

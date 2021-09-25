@@ -12,6 +12,7 @@ type Authorization interface {
 
 type MoneySource interface {
 	GetAllSources(userId int) ([]models.SourceOut, error)
+	CreateSource(source models.Source) error
 }
 
 type Activity interface {

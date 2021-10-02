@@ -5,6 +5,7 @@ import (
 )
 
 type Currency struct {
+	Id     int    `json:"id" db:"id"`
 	Name   string `json:"name" db:"name"`
 	Ticket string `json:"ticket" db:"ticket"`
 }

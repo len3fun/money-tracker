@@ -25,8 +25,7 @@ func (r *CurrencyPostgres) CreateCurrency(item models.Currency) (int, error) {
 }
 
 func (r *CurrencyPostgres) GetAllCurrencies() ([]models.Currency, error) {
-	// todo: fix null if there are no records in db
-	var currencies []models.Currency
+	currencies := make([]models.Currency, 0)
 	query := fmt.Sprintf("SELECT id, name, ticket FROM %s", currenciesTable)
 
 	err := r.db.Select(&currencies, query)

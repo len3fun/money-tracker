@@ -13,7 +13,7 @@ func NewCurrencyService(repo repository.Currency) *CurrencyService {
 	return &CurrencyService{repo: repo}
 }
 
-func (s *CurrencyService) CreateCurrency(item models.Currency) error {
+func (s *CurrencyService) CreateCurrency(item models.Currency) (int, error) {
 	return s.repo.CreateCurrency(item)
 }
 

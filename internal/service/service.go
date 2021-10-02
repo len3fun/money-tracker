@@ -17,7 +17,7 @@ type MoneySource interface {
 }
 
 type Currency interface {
-	CreateCurrency(item models.Currency) error
+	CreateCurrency(item models.Currency) (int, error)
 	GetAllCurrencies() ([]models.Currency, error)
 }
 

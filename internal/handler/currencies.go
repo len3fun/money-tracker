@@ -20,13 +20,13 @@ func (h *Handler) createCurrency(c *gin.Context) {
 		return
 	}
 
-	err = h.services.Currency.CreateCurrency(input)
+	id, err := h.services.Currency.CreateCurrency(input)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, "ok")
+	c.JSON(http.StatusOK, gin.H{"id": id})
 }
 
 func (h *Handler) getAllCurrencies(c *gin.Context) {

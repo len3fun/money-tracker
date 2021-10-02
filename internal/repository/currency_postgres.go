@@ -14,11 +14,14 @@ func NewCurrencyPostgres(db *sqlx.DB) *CurrencyPostgres {
 	return &CurrencyPostgres{db: db}
 }
 
-func (r *CurrencyPostgres) CreateCurrency(item models.Currency) error {
-	// todo: return id
+func (r *CurrencyPostgres) CreateCurrency(item models.Currency) (int, error) {
+	var id int
 	query := fmt.Sprintf("INSERT INTO %s (name, ticket) VALUES ($1, $2) RETURNING id", currenciesTable)
-	_, err := r.db.Exec(query, item.Name, item.Ticket)
-	return err
+	row := r.db.QueryRow(query, item.Name, item.Ticket)
+	if err := row.Scan(&id); err != nil {
+		return 0, err
+	}
+	return id, nil
 }
 
 func (r *CurrencyPostgres) GetAllCurrencies() ([]models.Currency, error) {

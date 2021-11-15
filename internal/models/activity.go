@@ -29,16 +29,19 @@ type ActivitiesOut struct {
 
 func (a *Activity) Validate() error {
 	if a.Type == "" {
-		return errors.New("field 'type' shouldn't be empty")
+		return errors.New("field 'type' mustn't be empty")
 	}
 	if a.Type != incomeField && a.Type != expenseField {
-		return errors.New("field 'type' should be equal to 'income' or 'expense'")
+		return errors.New("field 'type' must be equal to 'income' or 'expense'")
 	}
 	if a.Label == "" {
-		return errors.New("field 'label' shouldn't be empty")
+		return errors.New("field 'label' mustn't be empty")
 	}
 	if a.Change.LessThanOrEqual(decimal.Zero) {
-		return errors.New("field 'change' should be greater than zero")
+		return errors.New("field 'change' must be greater than zero")
+	}
+	if a.SourceId == 0 {
+		return errors.New("field 'source_id' mustn't be empty")
 	}
 	return nil
 }

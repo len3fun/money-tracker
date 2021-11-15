@@ -26,10 +26,40 @@ func (r *ActivityPostgres) GetAllActivities(userId int) ([]models.ActivitiesOut,
 }
 
 func (r *ActivityPostgres) CreateActivity(activity models.Activity) error {
-	query := fmt.Sprintf("INSERT INTO %s(user_id, activity_type, change, label, activity_date) "+
-		"VALUES ($1, $2, $3, $4, $5)", activitiesTable)
-	logger.Debug(query)
-	_, err := r.db.Exec(query, activity.UserId, activity.Type,
+	tx, err := r.db.Begin()
+	if err != nil {
+		return err
+	}
+
+	newActivityQuery := fmt.Sprintf("INSERT INTO %s(user_id, source_id, activity_type, change, label, activity_date) "+
+		"VALUES ($1, $2, $3, $4, $5, $6)", activitiesTable)
+	logger.Debug(newActivityQuery)
+	_, err = r.db.Exec(newActivityQuery, activity.UserId, activity.SourceId, activity.Type,
 		activity.Change, activity.Label, activity.ActivityDate)
-	return err
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	updateBalanceQuery := r.generateUpdateBalanceQuery(activity.Type)
+
+	_, err = r.db.Exec(updateBalanceQuery, activity.Change, activity.SourceId, activity.UserId)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return tx.Commit()
+}
+
+// generateUpdateBalanceQuery generates db request for updating balance depending on activity type.
+func (r *ActivityPostgres) generateUpdateBalanceQuery(activityType string) string {
+	var sign string
+	if activityType == "income" {
+		sign = "+"
+	} else if activityType == "expense" {
+		sign = "-"
+	}
+	return fmt.Sprintf("UPDATE %s SET balance = balance %s $1 WHERE id = $2 AND user_id = $3;",
+		sourcesTable, sign)
 }

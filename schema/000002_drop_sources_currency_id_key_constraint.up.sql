@@ -1,1 +1,0 @@
-ALTER TABLE sources DROP CONSTRAINT sources_currency_id_key

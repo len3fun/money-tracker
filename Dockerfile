@@ -13,5 +13,6 @@ WORKDIR /app
 
 COPY --from=build /app/.bin/app .
 COPY --from=build /app/configs configs
+COPY --from=build /app/schema schema
 COPY --from=build /app/.env .
 CMD ["./app"]

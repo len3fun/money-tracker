@@ -1,6 +1,9 @@
 package main
 
 import (
+	"github.com/golang-migrate/migrate"
+	"github.com/golang-migrate/migrate/database/postgres"
+	_ "github.com/golang-migrate/migrate/source/file"
 	"github.com/joho/godotenv"
 	"github.com/len3fun/money-tracker/internal/handler"
 	"github.com/len3fun/money-tracker/internal/repository"
@@ -39,6 +42,25 @@ func main() {
 		return
 	}
 
+	const migrationsVersion = 1
+
+	driver, err := postgres.WithInstance(db.DB, &postgres.Config{})
+	if err != nil {
+		logger.Errorf("failed init driver for migration tool: %s", err.Error())
+		return
+	}
+
+	m, err := migrate.NewWithDatabaseInstance("file://./schema", "postgres", driver)
+	if err != nil {
+		logger.Errorf("failed init migrations tool: %s", err.Error())
+		return
+	}
+
+	if err := applyMigrations(migrationsVersion, m); err != nil {
+		logger.Errorf("failed to apply migrations: %s", err.Error())
+		return
+	}
+
 	repos := repository.NewRepository(db)
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
@@ -69,4 +91,30 @@ func initConfig() error {
 	viper.AddConfigPath("configs")
 	viper.SetConfigName("config")
 	return viper.ReadInConfig()
+}
+
+func applyMigrations(version uint, m *migrate.Migrate) error {
+	currentVersion, _, err := m.Version()
+	if err != nil {
+		switch err {
+		case migrate.ErrNilVersion:
+			logger.Info("DB doesn't have any migrations, try to apply latest version")
+			if err := m.Migrate(version); err != nil {
+				return err
+			}
+			currentVersion = version
+		case err:
+			return err
+		}
+	}
+
+	logger.Debugf("Current migrations version: %d", currentVersion)
+	if currentVersion != version {
+		logger.Info("DB has outdated migrations version, try to apply latest version")
+		if err := m.Migrate(version); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

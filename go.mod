@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.7.4
+	github.com/golang-migrate/migrate v3.5.4+incompatible
 	github.com/golang/mock v1.5.0
 	github.com/jmoiron/sqlx v1.3.4
 	github.com/joho/godotenv v1.3.0

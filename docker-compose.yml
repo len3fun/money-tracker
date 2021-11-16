@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  database:
+    container_name: money-tracker-db
+    hostname: db
+    image: postgres:14-alpine
+    restart: always
+    env_file:
+      - db.env
+    volumes:
+      - ./database-data:/var/lib/postgresql/data/
+
+  server:
+    container_name: money-tracker
+    image: money-tracker
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database

@@ -23,7 +23,7 @@ func (s *Source) Validate() error {
 		return errors.New("'type' field shouldn't be empty")
 	}
 	if s.CurrencyId <= 0 {
-		return errors.New("'currency_id' field should be more than 0")
+		return errors.New("'currency_id' field should be greater than 0")
 	}
 	return nil
 }

@@ -3,6 +3,7 @@ package handler
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/len3fun/money-tracker/pkg/logger"
 	"net/http"
 	"strings"
 )
@@ -56,4 +57,8 @@ func getUserId(c *gin.Context) (int, error) {
 	}
 
 	return idInt, nil
+}
+
+func (h *Handler) logRequest(c *gin.Context) {
+	logger.Infof("%s %s from %s", c.Request.Method, c.Request.URL.RequestURI(), c.Request.RemoteAddr)
 }

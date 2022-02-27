@@ -13,6 +13,7 @@ type Source struct {
 }
 
 type SourceOut struct {
+	ID      int             `json:"id" db:"id"`
 	Type    string          `json:"type" db:"source_type"`
 	Balance decimal.Decimal `json:"balance" db:"balance"`
 	Ticket  string          `json:"currency_id" db:"ticket"`

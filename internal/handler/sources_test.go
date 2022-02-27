@@ -161,11 +161,13 @@ func TestHandler_getAllSources(t *testing.T) {
 			mockBehavior: func(s *mock_service.MockMoneySource) {
 				s.EXPECT().GetAllSources(1).Return([]models.SourceOut{
 					{
+						ID:      1,
 						Type:    "test",
 						Balance: decimal.New(10, 0),
 						Ticket:  "RUB",
 					},
 					{
+						ID:      2,
 						Type:    "Cash",
 						Balance: decimal.New(20, 0),
 						Ticket:  "RUB",
@@ -177,7 +179,7 @@ func TestHandler_getAllSources(t *testing.T) {
 				s.EXPECT().ParseToken(token).Return(1, nil)
 			},
 			expectedStatusCode:  200,
-			expectedRequestBody: `[{"type":"test","balance":"10","currency_id":"RUB"},{"type":"Cash","balance":"20","currency_id":"RUB"}]`,
+			expectedRequestBody: `[{"id":1,"type":"test","balance":"10","currency_id":"RUB"},{"id":2,"type":"Cash","balance":"20","currency_id":"RUB"}]`,
 		},
 		{
 			name:         "Bad user id",

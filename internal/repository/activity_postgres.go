@@ -33,16 +33,28 @@ func (r *ActivityPostgres) CreateActivity(activity models.Activity) error {
 	}
 
 	newActivityQuery := fmt.Sprintf("INSERT INTO %s(user_id, source_id, activity_type, change, label, activity_date) "+
-		"VALUES ($1, $2, $3, $4, $5, $6)", activitiesTable)
+		"SELECT $1, s.id, $3, $4, $5, $6 "+
+		"FROM %s s "+
+		"WHERE user_id = $1 AND id = $2", activitiesTable, sourcesTable)
 	logger.Debug(newActivityQuery)
-	_, err = r.db.Exec(newActivityQuery, activity.UserID, activity.SourceID, activity.Type,
+	res, err := r.db.Exec(newActivityQuery, activity.UserID, activity.SourceID, activity.Type,
 		activity.Change, activity.Label, activity.ActivityDate)
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	// fixme: bug if user doesn't have source with such source id source won't be updated
+	n, err := res.RowsAffected()
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if n == 0 {
+		tx.Rollback()
+		return fmt.Errorf("user doesn't have such source id")
+	}
+
 	updateBalanceQuery := r.generateUpdateBalanceQuery(activity.Type)
 
 	_, err = r.db.Exec(updateBalanceQuery, activity.Change, activity.SourceID, activity.UserID)

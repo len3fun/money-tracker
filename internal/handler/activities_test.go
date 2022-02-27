@@ -36,12 +36,14 @@ func TestHandler_getAllActivities(t *testing.T) {
 			mockBehavior: func(s *mock_service.MockActivity) {
 				s.EXPECT().GetAllActivities(1).Return([]models.ActivitiesOut{
 					{
+						ID:           1,
 						Type:         "income",
 						Change:       decimal.New(1, 0),
 						Label:        "test",
 						ActivityDate: time.Date(2021, 11, 15, 9, 17, 7, 942137000, location),
 					},
 					{
+						ID:           2,
 						Type:         "income",
 						Change:       decimal.New(2, 0),
 						Label:        "test2",
@@ -50,7 +52,7 @@ func TestHandler_getAllActivities(t *testing.T) {
 				}, nil)
 			},
 			expectedStatusCode:  200,
-			expectedRequestBody: `[{"type":"income","change":"1","label":"test","activity_date":"2021-11-15T09:17:07.942137Z"},{"type":"income","change":"2","label":"test2","activity_date":"2021-11-15T09:23:51.501018Z"}]`,
+			expectedRequestBody: `[{"id":1,"type":"income","change":"1","label":"test","activity_date":"2021-11-15T09:17:07.942137Z"},{"id":2,"type":"income","change":"2","label":"test2","activity_date":"2021-11-15T09:23:51.501018Z"}]`,
 		},
 		{
 			name: "Bad user id",
@@ -126,8 +128,8 @@ func TestHandler_createActivity(t *testing.T) {
 			name:      "OK",
 			inputBody: `{"type": "expense", "label": "test", "change": 1, "source_id": 1, "activity_date": "2021-11-16T11:47:20.942137Z"}`,
 			inputActivity: models.Activity{
-				UserId:       1,
-				SourceId:     1,
+				UserID:       1,
+				SourceID:     1,
 				Type:         "expense",
 				Change:       decimal.New(1, 0),
 				Label:        "test",
@@ -212,8 +214,8 @@ func TestHandler_createActivity(t *testing.T) {
 			name:      "Service failure",
 			inputBody: `{"type": "expense", "label": "test", "change": 1, "source_id": 1, "activity_date": "2021-11-16T11:47:20.942137Z"}`,
 			inputActivity: models.Activity{
-				UserId:       1,
-				SourceId:     1,
+				UserID:       1,
+				SourceID:     1,
 				Type:         "expense",
 				Change:       decimal.New(1, 0),
 				Label:        "test",

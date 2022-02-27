@@ -47,7 +47,7 @@ func (h *Handler) createActivity(c *gin.Context) {
 		input.ActivityDate = time.Now()
 	}
 
-	input.UserId = userId
+	input.UserID = userId
 
 	err = h.services.Activity.CreateActivity(input)
 	if err != nil {

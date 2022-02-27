@@ -17,9 +17,10 @@ func NewActivityRepository(db *sqlx.DB) *ActivityPostgres {
 
 func (r *ActivityPostgres) GetAllActivities(userId int) ([]models.ActivitiesOut, error) {
 	activities := make([]models.ActivitiesOut, 0)
-	query := fmt.Sprintf("SELECT change, activity_type, label, activity_date "+
+	query := fmt.Sprintf("SELECT id, change, activity_type, label, activity_date "+
 		"FROM %s "+
-		"WHERE user_id = $1", activitiesTable)
+		"WHERE user_id = $1 "+
+		"ORDER BY activity_date DESC", activitiesTable)
 	logger.Debug(query)
 	err := r.db.Select(&activities, query, userId)
 	return activities, err
@@ -34,16 +35,17 @@ func (r *ActivityPostgres) CreateActivity(activity models.Activity) error {
 	newActivityQuery := fmt.Sprintf("INSERT INTO %s(user_id, source_id, activity_type, change, label, activity_date) "+
 		"VALUES ($1, $2, $3, $4, $5, $6)", activitiesTable)
 	logger.Debug(newActivityQuery)
-	_, err = r.db.Exec(newActivityQuery, activity.UserId, activity.SourceId, activity.Type,
+	_, err = r.db.Exec(newActivityQuery, activity.UserID, activity.SourceID, activity.Type,
 		activity.Change, activity.Label, activity.ActivityDate)
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
 
+	// fixme: bug if user doesn't have source with such source id source won't be updated
 	updateBalanceQuery := r.generateUpdateBalanceQuery(activity.Type)
 
-	_, err = r.db.Exec(updateBalanceQuery, activity.Change, activity.SourceId, activity.UserId)
+	_, err = r.db.Exec(updateBalanceQuery, activity.Change, activity.SourceID, activity.UserID)
 	if err != nil {
 		tx.Rollback()
 		return err

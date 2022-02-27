@@ -12,15 +12,16 @@ const (
 )
 
 type Activity struct {
-	UserId       int             `json:"user_id" db:"user_id"`
-	SourceId     int             `json:"source_id" db:"source_id"`
-	CategoryId   int             `json:"category_id" db:"category_id"`
+	UserID       int             `json:"user_id" db:"user_id"`
+	SourceID     int             `json:"source_id" db:"source_id"`
+	CategoryID   int             `json:"category_id" db:"category_id"`
 	Type         string          `json:"type" db:"activity_type"`
 	Change       decimal.Decimal `json:"change" db:"change"`
 	Label        string          `json:"label" db:"label"`
 	ActivityDate time.Time       `json:"activity_date" db:"activity_date"`
 }
 type ActivitiesOut struct {
+	ID           int             `json:"id" db:"id"`
 	Type         string          `json:"type" db:"activity_type"`
 	Change       decimal.Decimal `json:"change" db:"change"`
 	Label        string          `json:"label" db:"label"`
@@ -40,7 +41,7 @@ func (a *Activity) Validate() error {
 	if a.Change.LessThanOrEqual(decimal.Zero) {
 		return errors.New("field 'change' must be greater than zero")
 	}
-	if a.SourceId == 0 {
+	if a.SourceID == 0 {
 		return errors.New("field 'source_id' mustn't be empty")
 	}
 	return nil
